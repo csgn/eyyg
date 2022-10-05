@@ -29,3 +29,9 @@ options:
 ```
 $ python main.py -D <DB_NAME> --bearer_token <BEARER_TOKEN> --params "query=python&max_results=10"
 ```
+
+## TODOS
+- [x] MAKE REQUEST
+- [ ] CONVERT TO PANDAS DATAFRAME
+- [ ] STORE TO POSTGRESQL TABLE
+- [ ] CREATE DOCKERFILE AND BASHSCRIPT
