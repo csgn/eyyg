@@ -1,0 +1,1 @@
+python main.py -D ny --api_key bf9PyceVH87w2l7BznPoknCSS --secret cr7cYUC1rBV7qHBObQq02UH2FcvxBEFTvREdgVSUoq5Af9UqbN --bearer_token AAAAAAAAAAAAAAAAAAAAAJZZhwEAAAAApbJu2B05nNeqFFK8hB6PVUXFvuA%3DLpdgJXTZZiHTh0fNhbVREki7NSM78wmwZjimmE6k0L4JezYUVU
