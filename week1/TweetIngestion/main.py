@@ -27,9 +27,10 @@ def init_engine(*, username, password, host, port, database):
 
     try:
         engine = create_engine(uri)
+        engine.connect()
         logging.info(f"PostgreSQL engine is created: {uri}")
     except Exception as e:
-        logging.error(f"PostgreSQL engine is not created: {e}")
+        logging.error(f"PostgreSQL engine is not created")
         return
 
     return engine
@@ -66,13 +67,14 @@ def main(args) -> int:
                        port=args.port,
                        database=args.database)
 
+    if not db:
+        return 0
+
     it = make_request(tweet_session,
                       args.keyword,
                       args.iteration,
                       args.max_results)
 
-    if db:
-        db.connect()
 
 
 if __name__ == "__main__":
