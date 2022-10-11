@@ -1,9 +1,10 @@
 import argparse
 import logging
 import sys
+
+import psycopg2
 import requests
 import pandas as pd
-
 
 from sqlalchemy import create_engine
 from pprint import pprint
@@ -35,7 +36,6 @@ def init_engine(*, username, password, host, port, database):
 
     return engine
 
-    
 
 def make_request(session, keyword, iteration, max_results):
     q = {
@@ -57,15 +57,14 @@ def make_request(session, keyword, iteration, max_results):
         yield res_data["data"]
 
 
-
 def main(args) -> int:
     tweet_session = TweetSession(token=args.token)
 
     db = init_engine(username=args.username,
-                       password=args.password,
-                       host=args.host,
-                       port=args.port,
-                       database=args.database)
+                     password=args.password,
+                     host=args.host,
+                     port=args.port,
+                     database=args.database)
 
     if not db:
         return 0
@@ -75,6 +74,15 @@ def main(args) -> int:
                       args.iteration,
                       args.max_results)
 
+    data = pd.DataFrame()
+    for i in it:
+        data = pd.DataFrame.append(self=data, other=i, ignore_index=True, verify_integrity=False, sort=False)
+
+    conn = db.connect()
+    data.to_sql('tweet', con=conn, if_exists='replace', index=False)
+    conn = psycopg2.connect(f'{db.url}')
+    conn.autocommit = True
+    conn.close()
 
 
 if __name__ == "__main__":
@@ -101,4 +109,3 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     sys.exit(main(args))
-
