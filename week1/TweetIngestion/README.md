@@ -2,9 +2,8 @@
 
 ## Usage
 ```sh
-usage: main.py [-h] [-U USERNAME] [-W PASSWORD] [-H HOST] [-p PORT] -D
-               DATABASE [--api_key API_KEY] [--secret SECRET] --bearer_token
-               BEARER_TOKEN --params PARAMS
+usage: main.py [-h] [-U USERNAME] [-W PASSWORD] [-H HOST] [-p PORT] -D DATABASE --token TOKEN --keyword KEYWORD
+               [--max-results MAX_RESULTS] [--iteration ITERATION]
 
 Tweet Ingestion
 
@@ -18,16 +17,17 @@ options:
   -p PORT, --port PORT  database server port
   -D DATABASE, --database DATABASE
                         database name
-  --api_key API_KEY     TwitterAPI API Key
-  --secret SECRET       TwitterAPI Secret Key
-  --bearer_token BEARER_TOKEN
-                        TwitterAPI Bearer Token
-  --params PARAMS       Params to search
+  --token TOKEN         TwitterAPI Bearer Token
+  --keyword KEYWORD     Keyword to search
+  --max-results MAX_RESULTS
+                        Search result per iteration
+  --iteration ITERATION
+                        Total request number
 ```
 
 ## Example
 ```
-$ python main.py -D <DB_NAME> --bearer_token <BEARER_TOKEN> --params "query=python&max_results=10"
+$ python main.py -D <DB_NAME> --token <BEARER_TOKEN>" --keyword <KEYWORD>
 ```
 
 ## TODOS

@@ -2,60 +2,78 @@ import argparse
 import logging
 import sys
 import requests
+import pandas as pd
+
 
 from sqlalchemy import create_engine
 from pprint import pprint
 
-EXIT_SUCCESS = 0
-EXIT_ERROR = 1
-URI = "https://api.twitter.com/2/tweets/search/recent"
-
 logging.basicConfig(level=logging.DEBUG)
 
-def auth(r, bearer_token: str) -> any:
-    """
-    'https://api.twitter.com/2/tweets/search/recent?query=from:twitterdev' --header 'Authorization: Bearer $BEARER_TOKEN'
-    """
-    r.headers['Authorization'] = f"Bearer {bearer_token}"
-    r.headers["User-Agent"] = "TweetIngestion"
 
-    return r
+class TweetSession:
+    URL = "https://api.twitter.com/2/tweets/search/recent/"
 
-def make_request(*args) -> dict | int:
-    api_key, secret, bearer_token, params = args
-    params_list = params.split("&")
-    params_dict = dict([i.split("=") for i in params_list])
+    def __init__(self, token: str) -> None:
+        self.session = requests.Session()
+        self.session.headers.update({"Authorization": f'Bearer {token}'})
+
+    def get(self, q: str):
+        return self.session.get(self.URL, params=q)
+
+
+def init_engine(*, username, password, host, port, database):
+    uri = f'postgresql://{username}:{password}@{host}:{port}/{database}'
 
     try:
-        response = requests.request("GET", URI, 
-                                    auth=lambda _: auth(_, bearer_token),
-                                    params=params_dict)
-        logging.info(f"GET {response.url}")
-    except Exception as e:
-        logging.error(f"GET {e}")
-
-    return response
-
-def main(args: dict[str, str | int]) -> int:
-    username, password, host, port, database, *rest = args.values()
-    postgres_uri: str = f'postgresql://{username}:{password}@{host}:{port}/{database}'
-                    
-    try:
-        engine = create_engine(postgres_uri)
-        logging.info(f"PostgreSQL engine is created: {postgres_uri}")
+        engine = create_engine(uri)
+        logging.info(f"PostgreSQL engine is created: {uri}")
     except Exception as e:
         logging.error(f"PostgreSQL engine is not created: {e}")
-        return EXIT_ERROR
+        return
 
-    response = make_request(*rest)
+    return engine
 
-    if response.status_code != 200:
-        return EXIT_ERROR
+    
 
-    # CONVERT THE DATA TO pandas df, then save to PostgreSQL table
-    pprint(response.json())
+def make_request(session, keyword, iteration, max_results):
+    q = {
+        "query": keyword,
+        "max_results": max_results
+    }
 
-    return EXIT_SUCCESS
+    for _ in range(iteration):
+        next_query = "&".join(list(map(lambda x: f"{x[0]}={x[1]}",
+                                       q.items())))
+
+        res = session.get(q=next_query)
+        res_data = res.json()
+        next_token = res_data['meta']['next_token']
+
+        if next_token:
+            q["next_token"] = next_token
+
+        yield res_data["data"]
+
+
+
+def main(args) -> int:
+    tweet_session = TweetSession(token=args.token)
+
+    db = init_engine(username=args.username,
+                       password=args.password,
+                       host=args.host,
+                       port=args.port,
+                       database=args.database)
+
+    it = make_request(tweet_session,
+                      args.keyword,
+                      args.iteration,
+                      args.max_results)
+
+    if db:
+        db.connect()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Tweet Ingestion')
@@ -70,25 +88,15 @@ if __name__ == "__main__":
                         help='database server port', default=5432)
     parser.add_argument('-D', '--database', type=str,
                         help='database name', required=True)
-    parser.add_argument('--api_key', type=str,
-                        help='TwitterAPI API Key')
-    parser.add_argument('--secret', type=str,
-                        help='TwitterAPI Secret Key')
-    parser.add_argument('--bearer_token', type=str,
+    parser.add_argument('--token', type=str,
                         help='TwitterAPI Bearer Token', required=True)
-    parser.add_argument('--params', type=str,
-                        help='Params to search', required=True)
-
+    parser.add_argument('--keyword', type=str,
+                        help='Keyword to search', required=True)
+    parser.add_argument('--max-results', type=int,
+                        help='Search result per iteration', default=10)
+    parser.add_argument('--iteration', type=int,
+                        help='Total request number', default=1)
 
     args = parser.parse_args()
-    sys.exit(main({"username": args.username,
-                    "password": args.password,
-                    "host": args.host,
-                    "port": args.port,
-                    "database": args.database,
-                    "api_key": args.api_key,
-                    "secret": args.secret,
-                    "bearer_token": args.bearer_token,
-                    "params": args.params
-    }))
+    sys.exit(main(args))
 
