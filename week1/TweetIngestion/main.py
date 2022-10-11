@@ -30,7 +30,7 @@ def init_engine(*, username, password, host, port, database):
         engine.connect()
         logging.info(f"PostgreSQL engine is created: {uri}")
     except Exception as e:
-        logging.error(f"PostgreSQL engine is not created")
+        logging.error(f"PostgreSQL engine is not created: connection was refused {uri}")
         return
 
     return engine
