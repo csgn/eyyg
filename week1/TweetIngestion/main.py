@@ -28,13 +28,13 @@ def init_engine(*, username, password, host, port, database):
 
     try:
         engine = create_engine(uri)
-        engine.connect()
+        db = engine.connect()
         logging.info(f"PostgreSQL engine is created: {uri}")
     except Exception as e:
         logging.error(f"PostgreSQL engine is not created: connection was refused {uri}")
         return
 
-    return engine
+    return engine, db
 
 
 def make_request(session, keyword, iteration, max_results):
@@ -60,7 +60,7 @@ def make_request(session, keyword, iteration, max_results):
 def main(args) -> int:
     tweet_session = TweetSession(token=args.token)
 
-    db = init_engine(username=args.username,
+    engine, db = init_engine(username=args.username,
                      password=args.password,
                      host=args.host,
                      port=args.port,
