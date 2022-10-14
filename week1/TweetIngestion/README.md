@@ -30,8 +30,32 @@ options:
 $ python main.py -D <DB_NAME> --token <BEARER_TOKEN>" --keyword <KEYWORD>
 ```
 
+## Docker
+```bash
+docker run                                         \
+  -e KEYWORD=veri                                  \
+  -e DATABASE=tweetingestion                       \
+  tweetingestion
+```
+
+## or Simply
+```bash
+chmod +x run.sh && ./run.sh
+```
+
+## Defaults
+```
+  -e USERNAME=postgres                             \
+  -e PASSWORD=postgres                             \
+  -e HOST=localhost                                \
+  -e PORT=5432                                     \
+  -e MAX_RESULTS=100                               \
+  -e ITERATION=3                                   \
+  -e TOKEN=<BEARER_TOKEN>
+```
+
 ## TODOS
 - [x] MAKE REQUEST
 - [ ] CONVERT TO PANDAS DATAFRAME
 - [ ] STORE TO POSTGRESQL TABLE
-- [ ] CREATE DOCKERFILE AND BASHSCRIPT
+- [x] CREATE DOCKERFILE AND BASHSCRIPT

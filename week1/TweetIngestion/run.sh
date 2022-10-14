@@ -1,0 +1,1 @@
+sudo docker run -e DATABASE=tweetingestion -e KEYWORD=veri tweetingestion
