@@ -2,12 +2,11 @@ import argparse
 import logging
 import sys
 
-import psycopg2
 import requests
 import pandas as pd
 
+from tabulate import tabulate
 from sqlalchemy import create_engine
-from pprint import pprint
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -79,6 +78,13 @@ def main(args) -> int:
         data.to_sql(con=db, name=args.database +'_table', if_exists='append')
 
     # read from table and show them
+    query = f"""
+        select * from {args.database + '_table'}
+    """
+
+    df = pd.read_sql(query, con=db)
+
+    print(tabulate(df, headers="keys", tablefmt="psql"))
 
 
 if __name__ == "__main__":
