@@ -1,5 +1,7 @@
 # Tweet Ingestion
 
+[![asciicast](https://asciinema.org/a/s7dqiHvqmIK6NW0SAKhMbn9dl.svg)](https://asciinema.org/a/s7dqiHvqmIK6NW0SAKhMbn9dl)
+
 ## Usage
 ```sh
 usage: main.py [-h] [-U USERNAME] [-W PASSWORD] [-H HOST] [-p PORT] -D DATABASE --token TOKEN --keyword KEYWORD
