@@ -25,37 +25,12 @@ options:
                         Total request number
 ```
 
-## Example
+## Example (postgres must be running)
 ```
-$ python main.py -D <DB_NAME> --token <BEARER_TOKEN>" --keyword <KEYWORD>
+$ python main.py -D <DB_NAME> --token <BEARER_TOKEN> --keyword <KEYWORD>
 ```
 
-## Docker
+## or use Docker (POSTGRES_HOST must be 'db')
 ```bash
-docker run                                         \
-  -e KEYWORD=veri                                  \
-  -e DATABASE=tweetingestion                       \
-  tweetingestion
+./run.sh -D <POSTGRES_DB> -t <BEARER_TOKEN> -k <KEYWORD> -H db
 ```
-
-## or Simply
-```bash
-chmod +x run.sh && ./run.sh
-```
-
-## Defaults
-```
-  -e USERNAME=postgres                             \
-  -e PASSWORD=postgres                             \
-  -e HOST=localhost                                \
-  -e PORT=5432                                     \
-  -e MAX_RESULTS=100                               \
-  -e ITERATION=3                                   \
-  -e TOKEN=<BEARER_TOKEN>
-```
-
-## TODOS
-- [x] MAKE REQUEST
-- [ ] CONVERT TO PANDAS DATAFRAME
-- [ ] STORE TO POSTGRESQL TABLE
-- [x] CREATE DOCKERFILE AND BASHSCRIPT
