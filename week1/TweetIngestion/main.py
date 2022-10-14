@@ -28,13 +28,12 @@ def init_engine(*, username, password, host, port, database):
 
     try:
         engine = create_engine(uri)
-        db = engine.connect()
         logging.info(f"PostgreSQL engine is created: {uri}")
     except Exception as e:
         logging.error(f"PostgreSQL engine is not created: connection was refused {uri}")
         return
 
-    return engine, db
+    return engine
 
 
 def make_request(session, keyword, iteration, max_results):
@@ -60,29 +59,26 @@ def make_request(session, keyword, iteration, max_results):
 def main(args) -> int:
     tweet_session = TweetSession(token=args.token)
 
-    engine, db = init_engine(username=args.username,
+    engine = init_engine(username=args.username,
                      password=args.password,
                      host=args.host,
                      port=args.port,
                      database=args.database)
-
-    if not db:
+    if not engine:
         return 0
+
+    db = engine.connect()
 
     it = make_request(tweet_session,
                       args.keyword,
                       args.iteration,
                       args.max_results)
 
-    data = pd.DataFrame()
     for i in it:
-        data = pd.DataFrame.append(self=data, other=i, ignore_index=True, verify_integrity=False, sort=False)
+        data = pd.DataFrame(i)
+        data.to_sql(con=db, name=args.database +'_table', if_exists='append')
 
-    conn = db.connect()
-    data.to_sql('tweet', con=conn, if_exists='replace', index=False)
-    conn = psycopg2.connect(f'{db.url}')
-    conn.autocommit = True
-    conn.close()
+    # read from table and show them
 
 
 if __name__ == "__main__":
