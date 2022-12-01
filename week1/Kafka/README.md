@@ -1,9 +1,9 @@
 ```bash
-	echo KAFKA_BIN=<KAFKA_PATH_BIN> \
-		  KAFKA_CONF=<KAFKA_PATH_CONFIG> \
-		  KAFKA_HOST=<KAFKA_HOSTNAME> | localhost \
-		  KAFKA_PORT=<KAFKA_PORT> | 9092
-	>> .env
+echo KAFKA_BIN=<KAFKA_PATH_BIN> \
+	  KAFKA_CONF=<KAFKA_PATH_CONFIG> \
+	  KAFKA_HOST=<KAFKA_HOSTNAME> | localhost \
+	  KAFKA_PORT=<KAFKA_PORT> | 9092
+>> .env
 ```
 
 ```bash
