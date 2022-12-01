@@ -45,3 +45,11 @@ Options:
   --status [start|stop]  [required]
   --help                 Show this message and exit.
 ```
+
+```bash
+Usage: console.py topic [OPTIONS]
+
+Options:
+  --name TEXT  [required]
+  --help       Show this message and exit.
+```
