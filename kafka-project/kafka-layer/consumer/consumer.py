@@ -42,6 +42,8 @@ def main():
 
     kafka_bootstrap_servers = [f'{kafka_host}:{kafka_port}']
 
+    print(kafka_topic, kafka_bootstrap_servers)
+
     join_kafka(topic=kafka_topic,
                bootstrap_servers=kafka_bootstrap_servers,
                listener=kafka_listener)
