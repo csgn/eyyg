@@ -10,4 +10,4 @@ RUN echo KAFKA_TOPIC="eyyg" > .env
 RUN echo KAFKA_HOSTNAME="kafka" >> .env
 RUN echo KAFKA_PORT="9092" >> .env
 
-CMD ["python", "producer.py"]
+CMD ["python", "producer.py", "logfiles.log"]

@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /pg-data
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg-data:/pg-data:z
+      - ./schema/00_log.sql:/docker-entrypoint-initdb.d/00_log.sql:z
+    networks:
+      - app-tier
+
+volumes:
+  postgres:
+    driver: local
+
+networks:
+  app-tier:
+    driver: bridge

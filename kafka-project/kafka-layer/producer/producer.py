@@ -18,9 +18,9 @@ def read_chunk(fp):
         yield other
 
 def main(args):
-    kafka_topic = os.environ['KAFKA_TOPIC']
-    kafka_host =  os.environ['KAFKA_HOSTNAME']
-    kafka_port = os.environ['KAFKA_PORT']
+    kafka_topic = os.environ.get('KAFKA_TOPIC', 'eyyg')
+    kafka_host =  os.environ.get('KAFKA_HOSTNAME', 'localhost')
+    kafka_port = os.environ.get('KAFKA_PORT', 9092)
 
     kafka_bootstrap_servers = [f'{kafka_host}:{kafka_port}']
 
