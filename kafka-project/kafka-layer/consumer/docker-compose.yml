@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  consumer:
+    build: .
+    environment:
+      - "KAFKA_TOPIC=eyyg"
+      - "KAFKA_HOSTNAME=kafka"
+      - "KAFKA_PORT=9092"
+      - "POSTGRES_DB=postgres"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_HOST=postgres"
+    networks:
+      - kafka_app-tier
+      - postgres_app-tier
+networks:
+  kafka_app-tier:
+    external: true
+  postgres_app-tier:
+    external: true

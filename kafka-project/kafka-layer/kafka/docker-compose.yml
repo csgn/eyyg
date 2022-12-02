@@ -1,9 +1,5 @@
 version: "2"
 
-networks:
-  app-tier:
-    driver: bridge
-
 services:
   zookeeper:
     image: "bitnami/zookeeper:latest"
@@ -29,3 +25,7 @@ services:
       - 9092:9092
     depends_on:
       - zookeeper
+
+networks:
+  app-tier:
+    driver: bridge

@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  producer:
+    build: .
+    environment:
+      - "KAFKA_TOPIC=eyyg"
+      - "KAFKA_HOSTNAME=kafka"
+      - "KAFKA_PORT=9092"
+    networks:
+      - kafka_app-tier
+networks:
+  kafka_app-tier:
+    external: true

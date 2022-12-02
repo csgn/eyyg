@@ -39,7 +39,7 @@ def join_kafka(*,
 def kafka_listener(other: Any):
     try:
         conn = connect(
-            dbname=os.environ['DB_NAME'],
+            dbname=os.environ['POSTGRES_DB'],
             user=os.environ['POSTGRES_USER'],
             host=os.environ['POSTGRES_HOST'],
             password=os.environ['POSTGRES_PASSWORD']
@@ -52,14 +52,13 @@ def kafka_listener(other: Any):
     data = str(other.value, encoding='utf-8')
     data = json.loads(data)
 
-    #_id = str(other.key, encoding='utf-8')
+    _id = str(other.key, encoding='utf-8')
     _host = data['host']
     _user = data['user']
     _request_time = datetime.fromtimestamp(data['request_time'])
     _status = data['status']
     _bytes_sent = data['bytes_sent']
     _bytes_out = data['bytes_out']
-    print(_request_time)
 
     (_request_method,
      _request_endpoint,
@@ -94,7 +93,7 @@ def kafka_listener(other: Any):
         cursor.close()
         conn.close()
         #_ = cursor.fetchone()[0]
-        print("INSERTED")
+        print("[INSERTED]: ", _id)
     except Exception as e:
         print("ERROR", e)
 
@@ -115,7 +114,4 @@ def main():
 
 
 if __name__ == '__main__':
-    from dotenv import load_dotenv
-    load_dotenv()
-    
     sys.exit(main())

@@ -37,7 +37,6 @@ def main(args):
     log_file = args[1]
     with open(log_file, 'r') as f:
         for chunk in read_chunk(f):
-            time.sleep(0.05)
             parsed = parser.parse(chunk)
 
             body = {
@@ -61,7 +60,4 @@ def main(args):
 
 
 if __name__ == '__main__':
-    from dotenv import load_dotenv
-    load_dotenv()
-
     sys.exit(main(sys.argv))
