@@ -1,7 +1,7 @@
 ```bash
 echo KAFKA_BIN=<KAFKA_PATH_BIN> \
 	  KAFKA_CONF=<KAFKA_PATH_CONFIG> \
-	  KAFKA_HOST=<KAFKA_HOSTNAME> | localhost \
+	  KAFKA_HOSTNAME=<KAFKA_HOSTNAME> | localhost \
 	  KAFKA_PORT=<KAFKA_PORT> | 9092
 >> .env
 ```
@@ -13,21 +13,9 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  client
   kafka
   topic
   zookeeper
-```
-
-```bash
-Usage: console.py client [OPTIONS]
-
-Options:
-  -t, --type [consumer|producer]  [required]
-  -T, --topic TEXT                [required]
-  --message TEXT
-  --file TEXT
-  --help                          Show this message and exit.
 ```
 
 ```bash
