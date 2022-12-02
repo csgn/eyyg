@@ -5,7 +5,7 @@ import json
 import uuid
 
 from kafka import KafkaProducer
-from utils import log_parser
+from log_parser import parser
 
 
 def read_chunk(fp):
@@ -17,7 +17,7 @@ def read_chunk(fp):
 
         yield other
 
-def main():
+def main(args):
     kafka_topic = os.environ['KAFKA_TOPIC']
     kafka_host =  os.environ['KAFKA_HOSTNAME']
     kafka_port = os.environ['KAFKA_PORT']
@@ -34,10 +34,11 @@ def main():
         print("producer is not created")
         return
 
-    with open('../assets/logfiles.log', 'r') as f:
+    log_file = args[1]
+    with open(log_file, 'r') as f:
         for chunk in read_chunk(f):
             time.sleep(0.05)
-            parsed = log_parser.parser.parse(chunk)
+            parsed = parser.parse(chunk)
 
             body = {
                 "host": parsed.remote_host,
@@ -63,4 +64,4 @@ if __name__ == '__main__':
     from dotenv import load_dotenv
     load_dotenv()
 
-    sys.exit(main())
+    sys.exit(main(sys.argv))
