@@ -7,10 +7,11 @@ services:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_HOST=postgres"
+      - "PORT=3005"
     networks:
       - postgres_app-tier
     ports:
-      - 3000:3000
+      - 3005:3005
 networks:
   postgres_app-tier:
     external: true
