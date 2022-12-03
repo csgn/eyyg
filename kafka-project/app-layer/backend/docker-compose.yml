@@ -3,35 +3,25 @@ version: "3"
 services:
   backend:
     build:
-      context: ./backend
+      context: .
     environment:
       - "POSTGRES_DB=postgres"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_HOST=postgres"
+      - "PORT=3001"
     networks:
       - postgres_app-tier
+      - app-tier
     ports:
-      - 8080:8080
+      - 3001:3001
     container_name: backend
     expose:
       - 8080
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    expose:
-      - 3000
-    ports:
-      - 3000:3000
-    environment:
-      - VITE_BACKEND_API_URL=backend
-    depends_on:
-      - "backend"
-    links:
-      - "backend:backend"
-
 networks:
+  app-tier:
+    driver: bridge
+
   postgres_app-tier:
     external: true

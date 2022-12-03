@@ -1,8 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-//const BACKEND_API_URL = "http://localhost:3005";
-
 import strokes from "./static/strokes";
 
 
@@ -50,7 +48,7 @@ function StatusChart({ url, method, title }) {
     setLoading(true);
 
     await axios
-      .get(`${process.env.BACKEND_API_URL}/api/whole-time?url=${url}&method=${method}`)
+      .get(`${import.meta.env.VITE_BACKEND_API_URL}/api/whole-time?url=${url}&method=${method}`)
       .then((res) => {
         setTimeout(() => {
           const t = [];
@@ -179,7 +177,7 @@ function Content({ url }) {
 
   const getMethods = async () => {
     await axios
-      .get(`${process.env.BACKEND_API_URL}/api/methods?url=${url}`)
+      .get(`${import.meta.env.VITE_BACKEND_API_URL}/api/methods?url=${url}`)
       .then((res) => {
         setMethods(res.data);
       })
@@ -207,7 +205,7 @@ function App() {
 
   const getEndpoints = async () => {
     await axios
-      .get(`${process.env.BACKEND_API_URL}/api/endpoints`)
+      .get(`${import.meta.env.VITE_BACKEND_API_URL}/api/endpoints`)
       .then((res) => {
         setEndpoints(res.data);
         setLoading(false);

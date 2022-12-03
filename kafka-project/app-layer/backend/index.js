@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
   res.send("Kafka Project API");
 });
 
-let PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+app.listen(3001, () => {
+  console.log(`Listening on port 3001`);
 });
